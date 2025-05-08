@@ -1,0 +1,4 @@
+node_modules/
+.env
+temp_*.m4a
+minutes.db
