@@ -1,106 +1,75 @@
 // summary-project/index.js
-// Node.js module for pre-recorded audio processing in an AI meeting summarizer SaaS
-require('dotenv').config({ path: './.env' }); // Fixed path to .env
-const { transcribeAudio } = require('./transcribe');
-const { summarizeText } = require('./summarize');
-const { saveMeeting } = require('./db');
-const { uploadFile } = require('./storage');
-const fs = require('fs');
-const youtubedl = require('youtube-dl-exec');
-const readline = require('readline');
+const express = require('express');
+const multer = require('multer');
+const { handlePreRecorded } = require('./handlers');
+const { getMeetings } = require('./db');
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors');
 
-// Processes pre-recorded audio (YouTube URLs or local files) with transcription and summarization
-async function handlePreRecorded(input) {
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+  },
+  transports: ['polling', 'websocket']
+});
+
+io.on('connection', (socket) => {
+  console.log('Socket connected, ID:', socket.id, 'Transport:', socket.conn.transport.name);
+});
+
+app.use((req, res, next) => {
+  console.log(`Request: ${req.method} ${req.url}`, req.headers);
+  next();
+});
+
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(express.json());
+const upload = multer({ dest: 'uploads/' });
+
+app.get('/', (req, res) => {
+  console.log('Root route accessed');
+  res.status(200).json({ message: 'Meeting Summarizer API. Use /upload (POST) or /meetings (GET).' });
+});
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const socketId = req.headers['x-socket-id'];
+  console.log('Received socket ID:', socketId);
+  const emitProgress = (stage, progress) => {
+    if (socketId) {
+      io.to(socketId).emit('progress', { stage, progress });
+      console.log('Emitting progress to:', { stage, progress, socketId });
+    } else {
+      console.log('No socketId, skipping progress emit:', { stage, progress });
+    }
+  };
+
   try {
-    console.time('Total Processing');
-    console.log('Processing audio...'); // Status message
-    let audioFile = input;
-    const isUrl = input.startsWith('http');
-    if (isUrl) {
-      console.time('Download YouTube');
-      console.log('Downloading YouTube audio...');
-      audioFile = `temp_${Date.now()}.m4a`;
-      await youtubedl(input, {
-        extractAudio: true,
-        audioFormat: 'm4a',
-        output: audioFile,
-        noCheckCertificates: true,
-        noWarnings: true,
-        preferFreeFormats: true,
-        noPlaylist: true,
-        noContinue: true
-      });
-      console.timeEnd('Download YouTube');
-    } else if (input.endsWith('.mp4')) {
-      console.time('Convert MP4');
-      console.log('Converting MP4 to audio...');
-      const ffmpeg = require('fluent-ffmpeg');
-      const tempAudio = `temp_${Date.now()}.m4a`;
-      await new Promise((resolve, reject) => {
-        ffmpeg(input).output(tempAudio).noVideo().audioBitrate('32k').on('end', resolve).on('error', reject).run();
-      });
-      audioFile = tempAudio;
-      console.timeEnd('Convert MP4');
-    }
-    console.time('Upload S3');
-    console.log('Uploading to S3...');
-    const s3Url = await uploadFile(audioFile);
-    console.timeEnd('Upload S3');
-    console.time('Transcribe');
-    console.log('Transcribing audio...');
-    const text = await transcribeAudio(audioFile);
-    console.timeEnd('Transcribe');
-    if (isUrl || input.endsWith('.mp4')) {
-      console.log('Deleting temp file...');
-      fs.unlinkSync(audioFile);
-    }
-    console.time('Summarize');
-    console.log('Summarizing text...');
-    const bullets = await summarizeText(text);
-    console.timeEnd('Summarize');
-    await saveMeeting(audioFile, text, bullets);
-    // Clean output
-    console.log(`S3 URL: ${s3Url}`);
-    console.log(`Transcription length: ${text.length} characters`);
-    console.log('\nSummary:');
-    bullets.split('\n').filter(Boolean).forEach(bullet => console.log(bullet));
-    console.timeEnd('Total Processing');
+    const { url } = req.body;
+    if (!url && !req.file) return res.status(400).json({ error: 'Please provide a YouTube URL or upload a file.' });
+    const input = url || req.file.path;
+    const isFile = !!req.file;
+    const result = await handlePreRecorded(input, isFile, emitProgress);
+    console.log('Sending result to frontend:', result);
+    res.json(result);
   } catch (error) {
-    console.error('Error in handlePreRecorded:', error.message);
-    throw error;
+    console.error('Error in /upload:', error);
+    res.status(500).json({ error: error.message || 'Something went wrong.' });
   }
-}
+});
 
-// CLI handler for running PRE mode directly from terminal
-const audioFile = process.argv[2];
-if (audioFile) {
-  (async () => {
-    console.time('Total Processing-CLI');
-    try {
-      const s3Url = await uploadFile(audioFile);
-      const text = await transcribeAudio(audioFile);
-      console.log(`Transcription (${audioFile}):`, text);
-      console.log(`S3 URL: ${s3Url}`);
-      console.log(`Stats (${audioFile}): ${text.length} chars, ${text.split(/\s+/).length} words`);
-      const bullets = await summarizeText(text);
-      await saveMeeting(audioFile, text, bullets);
-      console.log(`Summary (${audioFile}):`, bullets);
-      console.timeEnd('Total Processing-CLI');
-    } catch (err) {
-      console.error('Error in CLI handler:', err.message);
-    }
-  })();
-}
+app.get('/meetings', async (req, res) => {
+  try {
+    const meetings = await getMeetings();
+    res.json(meetings);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch meetings.' });
+  }
+});
 
-// Interactive CLI prompt for selecting PRE mode and input
-async function runPrompt() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  rl.question('Enter file path or YouTube URL (e.g., ./5min_far.m4a or https://youtube.com/...): ', async input => {
-    await handlePreRecorded(input);
-    rl.close();
-  });
-}
-runPrompt();
+const PORT = process.env.PORT || 5001;
+server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
