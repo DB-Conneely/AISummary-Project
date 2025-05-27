@@ -4,7 +4,8 @@
   "scripts": {
     "start": "concurrently --kill-others \"npm run backend\" \"npm run frontend\"",
     "backend": "node --no-warnings index.js",
-    "frontend": "cd frontend && npm run start"
+    "frontend": "cd frontend && npm run start",
+    "test": "jest"
   },
   "dependencies": {
     "assemblyai": "^4.6.1",
@@ -19,5 +20,9 @@
     "socket.io": "^4.7.5",
     "sqlite3": "^5.1.6",
     "youtube-dl-exec": "^2.4.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-mock-axios": "^4.8.0"
   }
 }
