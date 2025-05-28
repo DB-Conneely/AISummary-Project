@@ -11,11 +11,19 @@ function Loading() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('Starting process...');
   const isUploading = useRef(false);
+  const hasMounted = useRef(false);
+
+  console.log('Loading.js: Component mounted', { url, file });
 
   useEffect(() => {
-    console.log('Loading state:', { url, file }); // Debug state
+    if (hasMounted.current) {
+      console.log('Loading.js: Component already mounted, skipping setup');
+      return;
+    }
+    hasMounted.current = true;
+
     if (!url && !file) {
-      console.error('No URL or file provided in state');
+      console.error('No URL or file provided');
       navigate('/error', { state: { message: 'No URL or file provided.' } });
       return;
     }
@@ -49,7 +57,6 @@ function Loading() {
         return;
       }
       isUploading.current = true;
-
       try {
         console.log('Upload attempt:', {
           url: url || 'no url',
@@ -88,6 +95,20 @@ function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
       <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Cpath d=%22M0 0h40v40H0z%22 fill=%22none%22/%3E%3Cpath d=%22M10 10h20v20H10z%22 fill=%22none%22 stroke=%22%233B82F6%22 stroke-width=%221%22/%3E%3Cpath d=%22M15 15h10v10H15z%22 fill=%22none%22 stroke=%22%233B82F6%22 stroke-width=%221%22/%3E%3C/svg%3E')]"></div>
+      <div className="absolute bottom-0 left-0 transform translate-x-[-30%] translate-y-[30%]">
+        <img
+          src="/cog.png"
+          alt="Bottom Left Cog"
+          className="w-40 h-40 animate-spin-slow drop-shadow-md"
+        />
+      </div>
+      <div className="absolute top-0 right-0 transform translate-x-[20%] translate-y-[0%]">
+        <img
+          src="/cog.png"
+          alt="Top Right Cog"
+          className="w-40 h-40 animate-spin-medium drop-shadow-md"
+        />
+      </div>
       <div className="max-w-md w-full bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-700 text-center z-10">
         <h2 className="text-4xl font-extrabold text-white mb-6">Processing Your Summary</h2>
         <div className="flex justify-center mb-4">

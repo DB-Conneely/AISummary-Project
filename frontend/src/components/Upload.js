@@ -1,26 +1,30 @@
 // summary-project/frontend/src/components/Upload.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, provider, signInWithRedirect } from '../firebase';
+import { auth, provider, signInWithPopup } from '../firebase';
 
-function Upload({ user, handleSignOut }) {
+function Upload({ user, handleSignOut, authError }) {
   const [url, setUrl] = useState('');
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  console.log('Upload.js: Rendering with user:', user);
+
   const handleSignIn = async () => {
     try {
-      console.log('Initiating Google sign-in...');
-      await signInWithRedirect(auth, provider);
+      console.log('Upload.js: Initiating Google sign-in with popup...');
+      const result = await signInWithPopup(auth, provider);
+      console.log('Upload.js: Sign-in result:', result.user);
     } catch (error) {
-      console.error('Sign-in error:', error);
-      navigate('/error', { state: { message: 'Failed to sign in with Google.' } });
+      console.error('Upload.js: Sign-in error:', error.message, error.code);
+      navigate('/error', { state: { message: 'Failed to sign in with Google: ' + error.message } });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Upload.js: handleSubmit called', { url, file });
     if (!url && !file) {
       navigate('/error', { state: { message: 'Please provide a URL or file.' } });
       return;
@@ -35,6 +39,9 @@ function Upload({ user, handleSignOut }) {
         <h2 className="text-4xl font-extrabold text-white mb-8 text-center">
           Intu<span className="text-blue-400">AI</span>tive
         </h2>
+        {authError && (
+          <p className="text-red-400 mb-4 text-center">{authError}</p>
+        )}
         {user ? (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -69,12 +76,12 @@ function Upload({ user, handleSignOut }) {
             </button>
           </form>
         ) : (
-          <div className="text-center space-y-6">
+          <div className="text-center space-y-4">
             <h3 className="text-2xl font-semibold text-white mb-4">Welcome!</h3>
-            <p className="text-base text-gray-300">
+            <p className="text-gray-300">
               This application was created to make summarising Videos/Audio into concise points more efficient.
             </p>
-            <p className="text-base text-gray-300">Please sign in below to get started:</p>
+            <p className="text-gray-300">Please sign in below to get started:</p>
             <button
               onClick={handleSignIn}
               className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-500 transition transform hover:scale-105 duration-300"
