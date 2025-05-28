@@ -1,34 +1,31 @@
 // summary-project/frontend/src/app.js
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import Upload from './components/Upload.js';
 import Loading from './components/Loading.js';
 import Results from './components/Results.js';
-import Error from './components/Error.js'; 
+import Error from './components/Error.js';
 import Header from './components/header.js';
+import './transitions.css';
 
-function App() {
+function AppContent() {
+  const location = useLocation();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log('Setting up auth listener...');
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log('Auth state changed. User:', currentUser);
       setUser(currentUser);
     }, (error) => {
       console.error('Auth listener error:', error);
     });
-    return () => {
-      console.log('Cleaning up auth listener...');
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
     try {
-      console.log('Signing out...');
       await signOut(auth);
     } catch (error) {
       console.error('Sign-out error:', error);
@@ -36,14 +33,26 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <>
       <Header user={user} handleSignOut={handleSignOut} />
-      <Routes>
-        <Route path="/" element={<Upload user={user} handleSignOut={handleSignOut} />} />
-        <Route path="/loading" element={<Loading />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/error" element={<Error />} />
-      </Routes>
+      <TransitionGroup>
+        <CSSTransition key={location.key} classNames="slide" timeout={500}>
+          <Routes>
+            <Route path="/" element={<Upload user={user} handleSignOut={handleSignOut} />} />
+            <Route path="/loading" element={<Loading />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/error" element={<Error />} />
+          </Routes>
+        </CSSTransition>
+      </TransitionGroup>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

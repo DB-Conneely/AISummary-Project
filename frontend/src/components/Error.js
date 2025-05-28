@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/errorPage.js
+// summary-project/frontend/src/components/Error.js
 // React component for displaying error messages
 import { useLocation, Link } from 'react-router-dom';
 

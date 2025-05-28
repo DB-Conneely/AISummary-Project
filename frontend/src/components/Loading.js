@@ -13,8 +13,9 @@ function Loading() {
   const isUploading = useRef(false);
 
   useEffect(() => {
+    console.log('Loading state:', { url, file }); // Debug state
     if (!url && !file) {
-      console.error('No URL or file provided');
+      console.error('No URL or file provided in state');
       navigate('/error', { state: { message: 'No URL or file provided.' } });
       return;
     }
@@ -63,7 +64,7 @@ function Loading() {
             'Content-Type': 'multipart/form-data',
             'x-socket-id': socket.id || '',
           },
-          timeout: 180000 // 180s to handle long uploads
+          timeout: 180000,
         });
         console.log('Upload API Response:', response.data);
         navigate('/results', { state: response.data });
@@ -76,7 +77,7 @@ function Loading() {
       }
     };
 
-    socket.on('connect', upload); // Start upload after socket connects
+    socket.on('connect', upload);
 
     return () => {
       console.log('Disconnecting Loading socket, ID:', socket.id);
@@ -88,11 +89,14 @@ function Loading() {
     <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
       <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Cpath d=%22M0 0h40v40H0z%22 fill=%22none%22/%3E%3Cpath d=%22M10 10h20v20H10z%22 fill=%22none%22 stroke=%22%233B82F6%22 stroke-width=%221%22/%3E%3Cpath d=%22M15 15h10v10H15z%22 fill=%22none%22 stroke=%22%233B82F6%22 stroke-width=%221%22/%3E%3C/svg%3E')]"></div>
       <div className="max-w-md w-full bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-700 text-center z-10">
-        <h2 className="text-3xl font-bold text-white mb-6">Processing Your Summary</h2>
-        <p className="text-gray-400 mb-4">{status}</p>
+        <h2 className="text-4xl font-extrabold text-white mb-6">Processing Your Summary</h2>
+        <div className="flex justify-center mb-4">
+          <div className="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <p className="text-base text-gray-400 mb-4">{status}</p>
         <div className="w-full bg-gray-800 rounded-full h-2.5">
           <div
-            className="bg-blue-400 h-2.5 rounded-full transition-all duration-500"
+            className="bg-gradient-to-r from-blue-400 to-blue-600 h-2.5 rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           ></div>
         </div>

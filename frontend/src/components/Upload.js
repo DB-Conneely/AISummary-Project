@@ -1,8 +1,7 @@
 // summary-project/frontend/src/components/Upload.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, provider } from '../firebase';
-import { signInWithPopup } from 'firebase/auth';
+import { auth, provider, signInWithRedirect } from '../firebase';
 
 function Upload({ user, handleSignOut }) {
   const [url, setUrl] = useState('');
@@ -13,7 +12,7 @@ function Upload({ user, handleSignOut }) {
   const handleSignIn = async () => {
     try {
       console.log('Initiating Google sign-in...');
-      await signInWithPopup(auth, provider);
+      await signInWithRedirect(auth, provider);
     } catch (error) {
       console.error('Sign-in error:', error);
       navigate('/error', { state: { message: 'Failed to sign in with Google.' } });
@@ -33,21 +32,27 @@ function Upload({ user, handleSignOut }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="max-w-lg w-full bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-700">
-        <h2 className="text-4xl font-extrabold text-white mb-8 text-center">Intu<span className="text-blue-400">AI</span>tive</h2>
+        <h2 className="text-4xl font-extrabold text-white mb-8 text-center">
+          Intu<span className="text-blue-400">AI</span>tive
+        </h2>
         {user ? (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-400">YouTube URL</label>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                YouTube URL
+              </label>
               <input
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="e.g., https://youtube.com/..."
-                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400">Audio/Video File (m4a/mp4)</label>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Audio/Video File (m4a/mp4)
+              </label>
               <input
                 type="file"
                 accept=".m4a,.mp4"
@@ -58,21 +63,21 @@ function Upload({ user, handleSignOut }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-500 disabled:bg-gray-700 transition transform hover:scale-105"
+              className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-500 disabled:bg-gray-700 transition transform hover:scale-105 duration-300"
             >
               {loading ? 'Processing...' : 'Summarize Now'}
             </button>
           </form>
         ) : (
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <h3 className="text-2xl font-semibold text-white mb-4">Welcome!</h3>
-            <p className="text-gray-300">
+            <p className="text-base text-gray-300">
               This application was created to make summarising Videos/Audio into concise points more efficient.
             </p>
-            <p className="text-gray-300">Please sign in below to get started:</p>
+            <p className="text-base text-gray-300">Please sign in below to get started:</p>
             <button
               onClick={handleSignIn}
-              className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-500 transition transform hover:scale-105"
+              className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-500 transition transform hover:scale-105 duration-300"
             >
               Sign in with Google
             </button>
