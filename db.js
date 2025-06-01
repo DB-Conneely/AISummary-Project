@@ -1,42 +1,56 @@
 // summary-project/db.js
-// SQLite database module for storing and retrieving meeting data
-const sqlite3 = require('sqlite3').verbose(); // Imports SQLite3 with verbose logging
+// Module for managing SQLite database operations to store and retrieve meeting summaries.
 
-// Initializes SQLite database for storing meeting data
+// Import SQLite3 with verbose logging for detailed error messages.
+const sqlite3 = require('sqlite3').verbose();
+
+// Initialize SQLite database connection to 'minutes.db' file.
 const db = new sqlite3.Database('./minutes.db', (err) => {
-  if (err) console.error('DB Error:', err); // Logs database connection errors
-  // Creates minutes table if it doesn’t exist
+  // Log any errors that occur during database connection.
+  if (err) console.error('DB Error:', err);
+  // Create the 'minutes' table if it does not already exist.
   db.run(
     'CREATE TABLE IF NOT EXISTS minutes (id INTEGER PRIMARY KEY, filename TEXT, text TEXT, bullets TEXT)',
     (err) => {
+      // Log any errors that occur during table creation.
       if (err) console.error('Error creating table:', err);
+      // Log confirmation when the table is ready.
       else console.log('Minutes table ready');
     }
   );
 });
 
-// Saves meeting data (filename, transcript, bullets) to SQLite
+// Async function to save meeting data (S3 URL, transcript, and summary bullets) to the SQLite database.
 async function saveMeeting(filename, text, bullets) {
+  // Return a Promise to handle asynchronous database insertion.
   return new Promise((resolve, reject) => {
+    // Execute SQL INSERT to add meeting data to the 'minutes' table.
     db.run(
-      'INSERT INTO minutes (filename, text, bullets) VALUES (?, ?, ?)', // Inserts meeting data
-      [filename, text, bullets], // Parameters for filename, transcript, bullets
+      'INSERT INTO minutes (filename, text, bullets) VALUES (?, ?, ?)', // SQL query to insert data.
+      [filename, text, bullets], // Parameters: S3 URL (filename), transcript, and summary bullets.
       (err) => {
-        if (err) reject(err); // Rejects on error
-        else resolve(); // Resolves on success
+        // Reject the Promise with the error if insertion fails.
+        if (err) reject(err);
+        // Resolve the Promise on successful insertion.
+        else resolve();
       }
     );
   });
 }
 
-// Retrieves all meeting data from SQLite
+// Async function to retrieve all meeting summaries from the SQLite database.
 async function getMeetings() {
+  // Return a Promise to handle asynchronous database query.
   return new Promise((resolve, reject) => {
+    // Execute SQL SELECT to fetch all records from the 'minutes' table.
     db.all('SELECT filename, text, bullets FROM minutes', [], (err, rows) => {
-      if (err) reject(err); // Rejects on error
-      else resolve(rows); // Returns array of meeting records
+      // Reject the Promise with the error if the query fails.
+      if (err) reject(err);
+      // Resolve the Promise with the array of meeting records.
+      else resolve(rows);
     });
   });
 }
 
-module.exports = { saveMeeting, getMeetings }; // Exports database functions
+// Export the saveMeeting and getMeetings functions for use in other modules.
+module.exports = { saveMeeting, getMeetings };

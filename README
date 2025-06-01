@@ -1,45 +1,31 @@
-# MT-ai PRE Mode
-*Part of a larger AI-powered meeting summarizer SaaS, this module showcases real-time audio processing.*
+# IntuAIive - Video Summarization App
 
-A Node.js module for processing pre-recorded audio (YouTube URLs, local files) with transcription (AssemblyAI) and summarization (Ollama). Built with WebSocket, AWS S3, and SQLite.
+IntuAIive is a full-stack web application that summarizes YouTube videos or uploaded audio/video files (M4A/MP4) into concise bullet points with downloadable audio. Built as a portfolio project to showcase full-stack development skills.
 
 ## Features
-- Processes YouTube URLs or local audio files (e.g., `.m4a`, `.mp3`).
-- Uploads audio to AWS S3 for secure storage.
-- Transcribes audio using AssemblyAI API.
-- Summarizes transcripts into concise bullet points via Ollama.
-- Stores meeting data in SQLite for persistence.
-- Performance: please see example below with summary of the newest fireship video! (as of May 7th 2025 - https://www.youtube.com/watch?v=59wV96Kc3dQ)
+- **Summarization**: Transcribes audio using AssemblyAI and summarizes into 3 bullet points using Ollama, focusing on actions and decisions.
+- **Authentication**: Secure Google sign-in via Firebase.
+- **Real-Time Updates**: Socket.IO provides live progress updates during processing (download, conversion, upload, transcription, summarization).
+- **Storage**: Audio files are stored on AWS S3 with immediate temp file cleanup.
+- **UI**: Sleek cosmic-themed React frontend with Tailwind CSS and custom animations.
+- **Database**: SQLite stores meeting summaries (S3 URL, transcript, bullets).
 
-## Example Output
-sk3_neels@Dannys-MacBook-Air summary-project % node index.js
-Enter file path or YouTube URL (e.g., ./5min_far.m4a or https://youtube.com/...):https://www.youtube.com/watch?v=59wV96Kc3dQ
+## Tech Stack
+- **Frontend**: React, Tailwind CSS (CDN), React Router, Firebase Authentication
+- **Backend**: Node.js, Express, Socket.IO, SQLite, AWS S3
+- **APIs**: AssemblyAI (transcription), Ollama (summarization), youtube-dl-exec (YouTube downloads)
+- **Tools**: Fluent-FFmpeg (video-to-audio conversion), Multer (file uploads)
 
-Processing audio...
-Downloading YouTube audio...
-Download YouTube: 18.375s
-Uploading to S3...
-Upload S3: 3.363s
-Transcribing audio...
-Transcribe: 13.170s
-Deleting temp file...
-Summarizing text...
-Summarize: 25.686s
-S3 URL: https://mt-ai-bucket-sk3.s3.eu-west-2.amazonaws.com/temp_1746642165130.m4a
-Transcription length: 4713 characters
+## Demo
+Watch the demo video: [IntuAIive Demo](https://youtu.be/mHOy547Dm94)
 
-Summary:
-• Release new Gemini 2.5 Pro AI model
-• Overhaul Android 16 UI for emotional expression
-• OpenAI abandons for-profit plan, becomes uncapped profit corp
-• Partner with non-profit PBC to maintain optics
-• Acquire VS code fork (WindSurf) for £3 billion
-• Continue investing in AI models without transparency
-• Deploy full stack applications with PostgreSQL databases
-• Use Savala for hassle-free deployment with Google Kubernetes Engine and Cloudflare
-• Connect Git, repo, or Docker image to deploy with minimal YAML configs
-• Implement Savala software
-• Use £50 in free credits
-• Set up data management structure
-Total Processing: 1:00.633 (m:ss.mmm)
-sk3_neels@Dannys-MacBook-Air summary-project % 
+## Setup
+1. Clone the repo: `git clone https://github.com/your-username/summary-project.git`
+2. Install dependencies: `npm install` (root) and `cd frontend && npm install`
+3. Set up environment variables in `.env` (root) and `frontend/.env`
+4. Run the app: `npm start`
+5. Open `http://localhost:3000`
+
+## Author
+Created by DB-Conneely. Upwork profile link:
+https://www.upwork.com/freelancers/~01d80a7ef88999988f?viewMode=1

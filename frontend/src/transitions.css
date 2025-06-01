@@ -1,49 +1,111 @@
-/* summary-project/frontend/src/transitions.css */
+/* summary-project/transitions.css */
+/* Module for defining CSS classes for various UI transitions and animations.
+ * These classes are typically used with JavaScript frameworks (like Vue or React)
+ * that manage elements entering and exiting the DOM.
+ */
+
+/* --- Slide Transition Classes --- */
+
+/* .slide-enter
+ * Initial state for elements entering with a slide effect.
+ * Starts off-screen to the right and completely transparent.
+ */
 .slide-enter {
-  transform: translateX(100%);
-  opacity: 0;
+  transform: translateX(100%); /* Moves the element 100% of its width to the right. */
+  opacity: 0; /* Makes the element completely transparent. */
 }
+
+/* .slide-enter-active
+ * Active state for elements entering with a slide effect.
+ * Defines the transition property for smooth animation to the final state.
+ */
 .slide-enter-active {
-  transform: translateX(0);
-  opacity: 1;
-  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  transform: translateX(0); /* Slides the element back to its original position. */
+  opacity: 1; /* Fades the element in to full visibility. */
+  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out; /* Defines the duration and timing function for the animation. */
 }
+
+/* .slide-exit
+ * Initial state for elements exiting with a slide effect.
+ * Starts at its original position and fully visible.
+ */
 .slide-exit {
-  transform: translateX(0);
-  opacity: 1;
+  transform: translateX(0); /* Element is at its original position. */
+  opacity: 1; /* Element is fully visible. */
 }
+
+/* .slide-exit-active
+ * Active state for elements exiting with a slide effect.
+ * Defines the transition property for smooth animation to the final exit state.
+ */
 .slide-exit-active {
-  transform: translateX(-100%);
-  opacity: 0;
-  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  transform: translateX(-100%); /* Slides the element 100% of its width to the left. */
+  opacity: 0; /* Fades the element out to complete transparency. */
+  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out; /* Defines the duration and timing function for the animation. */
 }
 
+/* --- Fade Transition Classes --- */
+
+/* .fade-enter
+ * Initial state for elements entering with a fade effect.
+ * Starts slightly above its final position and completely transparent.
+ */
 .fade-enter {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-.fade-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
-}
-.fade-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fade-exit-active {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+  opacity: 0; /* Makes the element completely transparent. */
+  transform: translateY(-10px); /* Moves the element 10 pixels up from its final position. */
 }
 
+/* .fade-enter-active
+ * Active state for elements entering with a fade effect.
+ * Defines the transition property for smooth animation to the final state.
+ */
+.fade-enter-active {
+  opacity: 1; /* Fades the element in to full visibility. */
+  transform: translateY(0); /* Slides the element to its original vertical position. */
+  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out; /* Defines the duration and timing function for the animation. */
+}
+
+/* .fade-exit
+ * Initial state for elements exiting with a fade effect.
+ * Starts at its original position and fully visible.
+ */
+.fade-exit {
+  opacity: 1; /* Element is fully visible. */
+  transform: translateY(0); /* Element is at its original vertical position. */
+}
+
+/* .fade-exit-active
+ * Active state for elements exiting with a fade effect.
+ * Defines the transition property for smooth animation to the final exit state.
+ */
+.fade-exit-active {
+  opacity: 0; /* Fades the element out to complete transparency. */
+  transform: translateY(-10px); /* Moves the element 10 pixels up as it fades out. */
+  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out; /* Defines the duration and timing function for the animation. */
+}
+
+/* --- Spin Animation Classes --- */
+
+/* .animate-spin-slow
+ * Applies a slow, continuous spinning animation.
+ * The 'spin' keyframe animation is defined below.
+ */
 .animate-spin-slow {
-  animation: spin 10s linear infinite;
+  animation: spin 10s linear infinite; /* Applies the 'spin' animation over 10 seconds, linearly, infinitely. */
 }
+
+/* .animate-spin-medium
+ * Applies a medium-speed, continuous spinning animation.
+ * The 'spin' keyframe animation is defined below.
+ */
 .animate-spin-medium {
-  animation: spin 8s linear infinite;
+  animation: spin 8s linear infinite; /* Applies the 'spin' animation over 8 seconds, linearly, infinitely. */
 }
+
+/* @keyframes spin
+ * Defines the keyframe animation for a full 360-degree rotation.
+ */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); } /* Starts at 0 degrees rotation. */
+  100% { transform: rotate(360deg); } /* Ends at 360 degrees rotation (one full turn). */
 }
