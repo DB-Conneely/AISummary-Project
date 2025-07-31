@@ -1,10 +1,9 @@
-// summary-project/errorHandler.js
+// summary-project/src/backend/errorHandler.js
 // Module for handling errors and generating user-friendly error messages using the Ollama API.
 
 // Import axios for making HTTP requests to the Ollama API.
 const axios = require('axios');
-// Load environment variables from the .env file located one directory up.
-require('dotenv').config({ path: '../.env' });
+
 
 // Async function to summarize an error message into a simple, user-friendly sentence.
 async function handleError(errorMessage) {

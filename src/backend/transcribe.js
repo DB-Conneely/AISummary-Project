@@ -1,10 +1,9 @@
-// summary-project/transcribe.js
+// summary-project/src/backend/transcribe.js
 // Module for transcribing audio files using the AssemblyAI API.
 
 // Import the AssemblyAI library for audio transcription.
 const { AssemblyAI } = require('assemblyai');
 // Load environment variables from the .env file for secure API key access.
-require('dotenv').config({ path: './.env' });
 
 // Async function to transcribe an audio file and return the transcribed text.
 async function transcribeAudio(audioFile) {

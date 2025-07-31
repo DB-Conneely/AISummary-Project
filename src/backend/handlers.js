@@ -1,4 +1,4 @@
-// summary-project/handlers.js
+// summary-project/src/backend/handlers.js
 // Module containing core logic for processing uploaded files or YouTube URLs into summaries.
 
 // Import function to download audio from YouTube videos.

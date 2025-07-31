@@ -1,10 +1,8 @@
-// summary-project/summarize.js
+// summary-project/src/backend/summarize.js
 // Module for summarizing transcribed text into bullet points using the Ollama API.
 
 // Import axios for making HTTP requests to the Ollama API.
 const axios = require('axios');
-// Load environment variables from the .env file for secure API URL access.
-require('dotenv').config({ path: './.env' });
 
 // Async function to summarize a single text chunk into 3 bullet points using Ollama.
 async function summarizeChunk(chunk) {

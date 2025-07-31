@@ -1,4 +1,4 @@
-// summary-project/db.js
+// summary-project/src/backend/db.js
 // Module for managing SQLite database operations to store and retrieve meeting summaries.
 
 // Import SQLite3 with verbose logging for detailed error messages.

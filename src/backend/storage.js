@@ -1,19 +1,22 @@
-// summary-project/storage.js
+// summary-project/src/backend/storage.js
 // Module for uploading files to AWS S3 and retrieving public URLs.
 
 // Import the AWS SDK for interacting with S3 services.
 const AWS = require('aws-sdk');
 // Import the file system module for reading local files.
 const fs = require('fs');
-// Load environment variables from the .env file for secure AWS credentials.
-require('dotenv').config({ path: './.env' });
+// Explicitly update AWS config to force credential and region loading (tidy fix for old SDK).
+console.log('Loaded AWS_ACCESS_KEY_ID:', process.env.AWS_ACCESS_KEY_ID ? 'Yes (masked: ' + process.env.AWS_ACCESS_KEY_ID.slice(0, 5) + '...)' : 'Undefined!');
+console.log('Loaded AWS_SECRET_ACCESS_KEY:', process.env.AWS_SECRET_ACCESS_KEY ? 'Yes (masked: ' + process.env.AWS_SECRET_ACCESS_KEY.slice(0, 5) + '...)' : 'Undefined!');
+console.log('Loaded AWS_REGION:', process.env.AWS_REGION || 'Undefined!');
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
 
 // Initialize AWS S3 client with credentials and region from environment variables.
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID, // AWS access key ID from .env.
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // AWS secret access key from .env.
-  region: process.env.AWS_REGION // AWS region from .env (e.g., eu-west-2).
-});
+const s3 = new AWS.S3();
 
 // Async function to upload a file or buffer to an S3 bucket and return its public URL.
 async function uploadFile(filePathOrBuffer, filename) {

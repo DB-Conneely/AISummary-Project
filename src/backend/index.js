@@ -1,8 +1,10 @@
-// summary-project/index.js
+// summary-project/src/backend/index.js
 // Main entry point for the backend server, setting up Express, Socket.IO, and API routes.
 
 // Import Express for creating the web server.
 const express = require('express');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 // Import Multer for handling file uploads.
 const multer = require('multer');
 // Import the handlePreRecorded function for processing uploaded files or YouTube URLs.
