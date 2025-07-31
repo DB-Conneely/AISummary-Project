@@ -1,20 +1,26 @@
 # IntuitiveAI: AI-Powered Meeting Summarizer
 
-![INTUAITIVE LOGO](src/frontend/public/logo.svg)
+![INTUAITIVE LOGO](src/frontend/public/IntuAItive.png)
 
 IntuitiveAI is a sophisticated full-stack application designed to revolutionize how teams capture and distill insights from meetings, videos, and audio recordings. By harnessing state-of-the-art AI for transcription and summarization, it converts raw inputs—such as YouTube URLs or uploaded MP4/M4A files—into crisp, actionable bullet points focusing on key decisions and tasks. This tool empowers professionals to reclaim valuable time, fostering productivity in fast-paced environments like tech startups, corporate teams, and content creation workflows.
 
 Built with a modern tech stack, IntuitiveAI demonstrates expertise in AI integration, real-time systems, and scalable web development, its a showcase of full-stack engineering and machine learning applications.
 
+## Video Documentation
+
+**Demo Walkthrough**: https://youtu.be/WPfw94myxm0 
+**Technical Video**: https://youtu.be/yWXn2jmxybE 
+
 ## Key Features
 
-- **Intelligent Summarization Pipeline**: Automatically extracts audio, transcribes content via AssemblyAI, and generates focused summaries using local LLMs (e.g., Llama 3.2 via Ollama), emphasizing actions and decisions.
+- **Intelligent Summarization Pipeline**: Automatically extracts audio, transcribes content via AssemblyAI, and generates focused summaries using cloud-based AI (e.g., GPT models via OpenAI API), emphasizing actions and decisions.
 - **Flexible Input Handling**: Supports YouTube video downloads and direct file uploads, with seamless conversion to audio formats using FFmpeg.
 - **Real-Time User Feedback**: Leverages Socket.IO for live progress updates during multi-stage processing, ensuring a smooth and transparent experience.
 - **Secure and User-Friendly Authentication**: Integrates Firebase for Google-based sign-in, with intuitive error handling and result persistence.
 - **Cloud-Enabled Storage**: Stores processed audio on AWS S3 and summaries in a lightweight SQLite database for easy access and retrieval.
 - **Elegant Frontend Design**: A responsive React interface with animated transitions, loading animations, and dynamic backgrounds for an engaging user experience.
 - **Robust Error Management**: Comprehensive cleanup of temporary files, fallback mechanisms, and user-centric messaging to handle edge cases gracefully.
+ - **Meeting History**: View paginated lists of past summaries with timestamps, previews, and detailed views including full transcriptions.
 
 ## Technology Stack
 
@@ -30,7 +36,7 @@ Built with a modern tech stack, IntuitiveAI demonstrates expertise in AI integra
 - Node.js and Express.js for the API server
 - AWS SDK for S3 integration
 - AssemblyAI for high-accuracy transcription
-- Ollama for efficient local AI summarization
+- OpenAI API for efficient cloud-based AI summarization
 - FFmpeg for media processing
 - SQLite for data persistence
 - Multer and Axios for file handling and API calls
@@ -41,8 +47,7 @@ Built with a modern tech stack, IntuitiveAI demonstrates expertise in AI integra
 
 - Node.js (v18 or higher)
 - FFmpeg (install via package manager, e.g., brew install ffmpeg on macOS)
-- Ollama (install and pull the Llama 3.2 model: ollama pull llama3.2)
-- API keys for AWS, AssemblyAI, and Firebase (configured in .env files)
+- API keys for AWS, AssemblyAI, Firebase, and OpenAI (configured in .env files)
 
 ### Installation
 
