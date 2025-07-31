@@ -1,20 +1,26 @@
 // summary-project/src/backend/summarize.js
-// Module for summarizing transcribed text into bullet points using the Ollama API.
+// Module for summarizing transcribed text into bullet points using the OpenAI API.
 
-// Import axios for making HTTP requests to the Ollama API.
-const axios = require('axios');
+// Import the OpenAI SDK for making API requests.
+const OpenAI = require('openai');
 
-// Async function to summarize a single text chunk into 3 bullet points using Ollama.
+// Async function to summarize a single text chunk into 3 bullet points using OpenAI.
 async function summarizeChunk(chunk) {
-  // Send a POST request to the Ollama API with the text chunk and summarization parameters.
-  const summary = await axios.post(`${process.env.OLLAMA_URL}/api/generate`, {
-    model: 'llama3.2', // Use the LLaMA 3.2 model for summarization.
-    prompt: `Summarize this with goals "actions, decisions," 3 bullets only (**NO INTRO OR EXPLANATION TEXT - JUST BULLET POINTS**), under 150 chars total, use £ not $, specific actions only: ${chunk}`, // Prompt to generate 3 bullet points focused on actions/decisions.
-    stream: false, // Disable streaming to receive the full response at once.
-    max_tokens: 50 // Limit the response to 50 tokens for concise output.
+  // Initialize the OpenAI client (assumes dotenv loaded in index.js).
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  // Send a request to the OpenAI API with the text chunk and summarization parameters.
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4o-mini', // Use a lightweight model for cost-efficiency; can switch to 'gpt-4o' for better quality.
+    messages: [
+      { role: 'system', content: 'You are a helpful assistant that summarizes text into bullet points. think in terms of a minute taker/ administator sitting in on a meeting' },
+      { role: 'user', content: `Summarize this with goals "actions, decisions," 3 bullets only (**NO INTRO OR EXPLANATION TEXT - JUST BULLET POINTS**), under 150 chars total, use £ not $, specific actions only: ${chunk}` },
+    ],
+    max_tokens: 50, // Limit the response to 50 tokens for concise output.
   });
   // Return the summarized bullet points from the API response.
-  return summary.data.response;
+  return completion.choices[0].message.content;
 }
 
 // Async function to split text into chunks and summarize each into bullet points for scalability.

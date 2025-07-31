@@ -33,8 +33,10 @@ function Results() {
   };
 
   // Process the raw 'bullets' string into an array of individual bullet points.
-  // It splits the string by newline and filters to ensure each bullet starts with '•'.
-  const bulletPoints = bullets.split('\n').filter(bullet => bullet.trim().startsWith('•'));
+  // It splits the string by newline and filters to ensure each bullet starts with '•', '-', or '*'.
+  const bulletPoints = bullets.split('\n')
+    .map(bullet => bullet.trim())  // Trim whitespace from each line
+    .filter(bullet => bullet.startsWith('•') || bullet.startsWith('-') || bullet.startsWith('*'));  // Include common bullet starters
 
   return (
     <Background>

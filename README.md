@@ -4,7 +4,7 @@
 
 IntuitiveAI is a sophisticated full-stack application designed to revolutionize how teams capture and distill insights from meetings, videos, and audio recordings. By harnessing state-of-the-art AI for transcription and summarization, it converts raw inputs—such as YouTube URLs or uploaded MP4/M4A files—into crisp, actionable bullet points focusing on key decisions and tasks. This tool empowers professionals to reclaim valuable time, fostering productivity in fast-paced environments like tech startups, corporate teams, and content creation workflows.
 
-Built with a modern tech stack, IntuitiveAI demonstrates expertise in AI integration, real-time systems, and scalable web development—making it an impressive showcase for full-stack engineering and machine learning applications.
+Built with a modern tech stack, IntuitiveAI demonstrates expertise in AI integration, real-time systems, and scalable web development, its a showcase of full-stack engineering and machine learning applications.
 
 ## Key Features
 

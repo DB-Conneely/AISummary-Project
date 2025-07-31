@@ -72,8 +72,8 @@ function Header({ user, handleSignOut }) {
               <div className="border-t border-gray-700">
                 <Link
                   to="/history"
-                  className="block px-4 py-2 text-white hover:bg-gray-800 transition duration-300"
-                  onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
+                  className="block px-4 py-2 text-white bg-blue-600 hover:bg-blue-500 transition duration-300"
+                  onClick={() => setIsDropdownOpen(false)}
                 >
                   History
                 </Link>
