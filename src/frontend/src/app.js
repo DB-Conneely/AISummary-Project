@@ -17,6 +17,8 @@ import Loading from './components/Loading.js';
 import Results from './components/Results.js';
 import Error from './components/Error.js';
 import Header from './components/header.js';
+import MeetingHistory from './components/MeetingHistory.js';  // Add this import
+
 // Import CSS for transitions and animations.
 import './transitions.css';
 
@@ -51,6 +53,8 @@ function AppContent({ user, handleSignOut, authError }) {
               <Route path="/results" element={<Results />} />
               {/* Route for the Error component. */}
               <Route path="/error" element={<Error />} />
+              {/* Add this new route for history */}
+              <Route path="/history" element={<MeetingHistory />} />
             </Routes>
           </div>
         </CSSTransition>

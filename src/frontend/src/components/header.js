@@ -70,6 +70,15 @@ function Header({ user, handleSignOut }) {
                 </p>
               </div>
               <div className="border-t border-gray-700">
+                <Link
+                  to="/history"
+                  className="block px-4 py-2 text-white hover:bg-gray-800 transition duration-300"
+                  onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
+                >
+                  History
+                </Link>
+              </div>
+              <div className="border-t border-gray-700">
                 {/* Sign Out button. */}
                 <button
                   onClick={() => {

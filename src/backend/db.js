@@ -10,7 +10,7 @@ const db = new sqlite3.Database('./minutes.db', (err) => {
   if (err) console.error('DB Error:', err);
   // Create the 'minutes' table if it does not already exist.
   db.run(
-    'CREATE TABLE IF NOT EXISTS minutes (id INTEGER PRIMARY KEY, filename TEXT, text TEXT, bullets TEXT)',
+    'CREATE TABLE IF NOT EXISTS minutes (id INTEGER PRIMARY KEY, filename TEXT, text TEXT, bullets TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)',
     (err) => {
       // Log any errors that occur during table creation.
       if (err) console.error('Error creating table:', err);
@@ -43,7 +43,7 @@ async function getMeetings() {
   // Return a Promise to handle asynchronous database query.
   return new Promise((resolve, reject) => {
     // Execute SQL SELECT to fetch all records from the 'minutes' table.
-    db.all('SELECT filename, text, bullets FROM minutes', [], (err, rows) => {
+    db.all('SELECT filename, text, bullets, created_at FROM minutes ORDER BY created_at DESC', [], (err, rows) => {
       // Reject the Promise with the error if the query fails.
       if (err) reject(err);
       // Resolve the Promise with the array of meeting records.
