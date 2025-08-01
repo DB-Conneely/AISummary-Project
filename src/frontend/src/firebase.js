@@ -1,4 +1,4 @@
-// summary-project/frontend/src/firebase.js
+// summary-project/src/frontend/src/firebase.js
 // Module for initializing Firebase and configuring Google authentication.
 
 // Import necessary functions from the Firebase SDK.

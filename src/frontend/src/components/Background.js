@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/Background.js
+// summary-project/src/frontend/src/components/Background.js
 // Component for creating a dynamic, animated background for the application.
 
 // Background component takes 'children' as a prop, allowing other components to be rendered on top of it.

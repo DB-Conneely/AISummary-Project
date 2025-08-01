@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/header.js
+// summary-project/src/frontend/src/components/header.js
 // Header component displaying the application logo and user authentication status with a dropdown menu.
 
 // Import Link component for navigation.

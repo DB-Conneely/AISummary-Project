@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/Loading.js
+// summary-project/src/frontend/src/components/Loading.js
 // Component to display processing status and progress during summary generation.
 // It handles real-time updates via WebSockets and manages the API upload.
 

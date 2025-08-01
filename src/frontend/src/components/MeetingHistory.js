@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/MeetingHistory.js
+// summary-project/src/frontend/src/components/MeetingHistory.js
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,7 +9,7 @@ function MeetingHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 5; // Updated to 5 as requested
+  const perPage = 5; // Updated to 5
   const navigate = useNavigate();
 
   useEffect(() => {

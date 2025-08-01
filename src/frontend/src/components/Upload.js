@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/Upload.js
+// summary-project/src/frontend/src/components/Upload.js
 // Component for handling user input: YouTube URLs or audio/video file uploads.
 // It also manages user authentication (sign-in/sign-out).
 

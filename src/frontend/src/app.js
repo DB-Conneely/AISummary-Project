@@ -1,4 +1,4 @@
-// summary-project/frontend/src/App.js
+// summary-project/src/frontend/src/App.js
 // Main application component responsible for routing, authentication state, and overall layout.
 
 // Import React hooks for managing state and side effects.

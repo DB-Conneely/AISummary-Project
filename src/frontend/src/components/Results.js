@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/Results.js
+// summary-project/src/frontend/src/components/Results.js
 // Component to display the summary results, including text length, S3 audio URL, and bullet points.
 
 // Import React hooks for accessing route state and navigation.

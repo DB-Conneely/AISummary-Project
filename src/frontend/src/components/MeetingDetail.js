@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/MeetingDetail.js
+// summary-project/src/frontend/src/components/MeetingDetail.js
 import { useLocation, useNavigate } from 'react-router-dom';
 import Background from './Background';
 

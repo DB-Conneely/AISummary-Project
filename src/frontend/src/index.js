@@ -1,4 +1,4 @@
-// summary-project/frontend/src/index.js
+// summary-project/src/frontend/src/index.js
 // Main entry point for the React frontend application.
 
 // Import React library, essential for building UI components.

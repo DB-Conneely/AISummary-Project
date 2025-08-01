@@ -1,4 +1,4 @@
-// summary-project/frontend/src/components/Error.js
+// summary-project/src/frontend/src/components/Error.js
 // Component to display error messages to the user.
 
 // Import hooks for accessing route state and Link component for navigation.
